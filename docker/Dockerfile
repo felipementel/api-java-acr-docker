@@ -2,7 +2,7 @@
 # Stage 1 – dependency cache
 # Only re-runs when pom.xml changes; Maven deps are cached.
 # ──────────────────────────────────────────────────────────────
-FROM eclipse-temurin:21-jdk-alpine AS deps
+FROM eclipse-temurin:25-jdk-alpine AS deps
 
 WORKDIR /build
 
@@ -30,7 +30,7 @@ RUN ./mvnw clean package -DskipTests -B
 # Splits the fat JAR into 4 independent Docker layers so that
 # library changes don't invalidate the application-code layer.
 # ──────────────────────────────────────────────────────────────
-FROM eclipse-temurin:21-jdk-alpine AS layers
+FROM eclipse-temurin:25-jdk-alpine AS layers
 
 WORKDIR /build
 
@@ -44,7 +44,7 @@ RUN java -Djarmode=tools -jar app.jar extract \
 # ──────────────────────────────────────────────────────────────
 # Stage 4 – minimal runtime image (JRE only, no JDK)
 # ──────────────────────────────────────────────────────────────
-FROM eclipse-temurin:21-jre-alpine AS runtime
+FROM eclipse-temurin:25-jre-alpine AS runtime
 
 RUN apk update && apk upgrade --no-cache
 
