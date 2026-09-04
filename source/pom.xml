@@ -16,7 +16,7 @@
     <description>CRUD de usuarios em Spring Boot com Ports and Adapters</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
     </properties>
 
     <dependencyManagement>

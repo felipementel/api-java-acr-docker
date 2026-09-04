@@ -4,9 +4,9 @@ Exemplo do mesmo CRUD de usuarios das pastas `python`, `dotnet` e `node`, agora 
 
 ## Tecnologias
 
-- Java 21+
+- Java 25+
 - Maven Wrapper
-- Spring Boot 4.0.3
+- Spring Boot 4.1.1
 - Spring Web MVC
 - Spring Validation
 - Springdoc OpenAPI
@@ -15,7 +15,7 @@ Exemplo do mesmo CRUD de usuarios das pastas `python`, `dotnet` e `node`, agora 
 ## Pre-requisitos
 
 - Windows com PowerShell
-- Java 21 ou superior instalado e configurado no `PATH`
+- Java 25 ou superior instalado e configurado no `PATH`
 - Maven Wrapper incluido no projeto (`mvnw` e `mvnw.cmd`)
 
 Para validar a instalacao:
@@ -27,7 +27,7 @@ java -version
 
 Se um desses comandos nao funcionar, primeiro ajuste o `JAVA_HOME` e o `PATH` da maquina.
 
-Se o `mvn -version` mostrar Java 17, o build vai falhar com `release version 21 not supported`. O projeto compila normalmente com Java 21 ou superior.
+Se o `mvn -version` mostrar uma versao anterior ao Java 25, o build vai falhar com `release version 25 not supported`. O projeto compila normalmente com Java 25 ou superior.
 
 Exemplo de ajuste so para a sessao atual do PowerShell:
 
@@ -179,7 +179,7 @@ O CI tambem executa `./mvnw -B verify`.
 
 O workflow fica em `.github/workflows/ci.yml` e executa:
 
-- setup do Java 21
+- setup do Java 25
 - cache Maven
 - `./mvnw -B verify`
 
