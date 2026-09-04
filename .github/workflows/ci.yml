@@ -23,7 +23,7 @@ jobs:
           cache: maven
 
       - name: Make Maven Wrapper executable
-        run: chmod +x ./mvnw
+        run: chmod +x ./source/mvnw
 
       - name: Run tests
         run: ./mvnw -B verify
