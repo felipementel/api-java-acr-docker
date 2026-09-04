@@ -26,4 +26,6 @@ jobs:
         run: chmod +x ./source/mvnw
 
       - name: Run tests
-        run: ./source/mvnw -B verify
+        run: |
+          cd ./source;
+          ./mvnw -B verify
