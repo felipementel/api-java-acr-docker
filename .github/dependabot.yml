@@ -4,18 +4,37 @@ updates:
     directory: "/source"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "11:00"
+      timezone: "America/Sao_Paulo"
     open-pull-requests-limit: 10
     labels:
       - "dependencies"
     commit-message:
-      prefix: "deps: "
+      prefix: "[maven]: "
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "11:00"
+      timezone: "America/Sao_Paulo"
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
     commit-message:
       prefix: "[gh-actions]: "
+
+  - package-ecosystem: "docker"
+    directory: "/docker"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "11:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+    commit-message:
+      prefix: "[dockerfile]: "
