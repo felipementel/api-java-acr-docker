@@ -1,0 +1,58 @@
+# ──────────────────────────────────────────────────────────────
+# VARIANTE DE TESTE (não é o Dockerfile oficial)
+# Igual ao Dockerfile principal, mas SEM o stage de extração de
+# layers do Spring Boot — o COPY --from é feito direto do stage
+# "build". Objetivo: isolar o bug do ACR Tasks ("layer does not
+# exist" no export) que ocorre com o padrão de 2 níveis de
+# COPY --from (deps → build → layers → runtime).
+# ──────────────────────────────────────────────────────────────
+
+# ──────────────────────────────────────────────────────────────
+# Stage 1 – dependency cache
+# Only re-runs when pom.xml changes; Maven deps are cached.
+# ──────────────────────────────────────────────────────────────
+FROM eclipse-temurin:25-jdk-alpine AS deps
+
+WORKDIR /build
+
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+
+# Strip Windows CRLF line endings from mvnw (safe no-op if already LF)
+RUN sed -i 's/\r$//' mvnw && \
+    chmod +x mvnw && \
+    ./mvnw dependency:go-offline -B
+
+# ──────────────────────────────────────────────────────────────
+# Stage 2 – compile and package
+# Only re-runs when source changes.
+# ──────────────────────────────────────────────────────────────
+FROM deps AS build
+
+COPY src ./src
+
+RUN ./mvnw clean package -DskipTests -B
+
+# ──────────────────────────────────────────────────────────────
+# Stage 3 – minimal runtime image (JRE only, no JDK)
+# Fat JAR copiado direto do stage de build (sem extração de layers).
+# ──────────────────────────────────────────────────────────────
+FROM eclipse-temurin:25-jre-alpine AS runtime
+
+RUN apk update && apk upgrade --no-cache
+
+RUN addgroup -S appgroup && \
+    adduser -S appuser -G appgroup
+
+WORKDIR /app
+
+COPY --from=build /build/target/*.jar app.jar
+
+RUN chown -R appuser:appgroup /app
+
+USER appuser
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
